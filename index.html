@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<meta name="referrer" content="no-referrer">
+		<title>Password Hash</title>
+		<link rel="icon" type="image/png" sizes="1x1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQAAAAA3bvkkAAAACklEQVR4nGNgAAAAAgABSK+kcQAAAABJRU5ErkJggg==">
+		<script>
+			"use strict";
+
+			const sha256 = function(value)
+			{
+				const byteHash = new Uint8Array(await crypto.subtle.digest("SHA-256",(new TextEncoder()).encode(value)))
+				const textHash = Array.from(byteHash.map(function(byte)
+				{
+					byte.toString(16).padStart(2,"0")
+				})).join("");
+
+				return textHash;
+			}
+
+			const updateHash = function(value)
+			{
+				document.getElementById("output").innerHTML = sha256(value);
+
+				return;
+			}
+		</script>
+	</head>
+	<body>
+		<input type="text" id="password" oninput="updateHash(this.value)"></input>
+		<br />
+		<div id="output">
+		</div>
+	</body>
+</html>
