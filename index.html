@@ -12,20 +12,20 @@
 		<script>
 			"use strict";
 
-			const sha256 = function(value)
+			const sha256 = async function(value)
 			{
-				const byteHash = new Uint8Array(await crypto.subtle.digest("SHA-256",(new TextEncoder()).encode(value)))
-				const textHash = Array.from(byteHash.map(function(byte)
+				const byteHash = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", (new TextEncoder()).encode(value))));
+				const textHash = byteHash.map(function(byte)
 				{
-					byte.toString(16).padStart(2,"0")
-				})).join("");
+					return byte.toString(16).padStart(2,"0");
+				}).join("");
 
 				return textHash;
 			}
 
-			const updateHash = function(value)
+			const updateHash = async function(value)
 			{
-				document.getElementById("output").innerHTML = sha256(value);
+				document.getElementById("output").innerHTML = await sha256(value);
 
 				return;
 			}
@@ -33,7 +33,7 @@
 	</head>
 	<body>
 		<input type="text" id="password" oninput="updateHash(this.value)"></input>
-		<br />
+		<p />
 		<div id="output">
 		</div>
 	</body>
